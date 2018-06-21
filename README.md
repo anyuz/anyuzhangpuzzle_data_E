@@ -1,6 +1,6 @@
 
 # Table of Contents
-1. [Understanding the challenge](README.md#understanding-the-challenge
+1. [Understanding the challenge](README.md#understanding-the-challenge)
 2. [Implementation details](README.md#implementation-details)
 3. [Test Results](README.md#test-results)
 4. [My input files](README.md#my-input-files)
