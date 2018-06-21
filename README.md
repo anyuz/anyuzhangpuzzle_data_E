@@ -1,69 +1,19 @@
 
 # Table of Contents
-1. [Understanding the challenge](README.md#understanding-the-challenge)
-2. [Introduction](README.md#introduction)
-3. [Challenge summary](README.md#challenge-summary)
-4. [Details of challenge](README.md#details-of-challenge)
-5. [Implementation details](README.md#implementation-details)
-6. [Input files](README.md#input-files)
-7. [Output file](README.md#output-file)
-8. [Example](README.md#example)
-9. [Writing clean, scalable and well-tested code](README.md#writing-clean-scalable-and-well-tested-code)
-10. [Repo directory structure](README.md#repo-directory-structure)
-11. [Testing your directory structure and output format](README.md#testing-your-directory-structure-and-output-format)
-11. [Instructions to submit your solution](README.md#instructions-to-submit-your-solution)
-13. [FAQ](README.md#faq)
+1. [Understanding the challenge](README.md#understanding-the-challenge
+2. [Implementation details](README.md#implementation-details)
+3. [Test Results](README.md#test-results)
+4. [My input files](README.md#my-input-files)
+5. [My output file](README.md#my-output-file)
 
 # Understanding the challenge
 
-We highly recommend that you take a few dedicated minutes to read this README in its entirety before starting to think about potential solutions. You'll probably find it useful to review the examples and understand the problem at a high-level before digging into the specific details, many of which are covered in the FAQ.
-
-# Introduction
-
-Many investors, researchers, journalists and others use the Securities and Exchange Commission's Electronic Data Gathering, Analysis and Retrieval (EDGAR) system to retrieve financial documents, whether they are doing a deep dive into a particular company's financials or learning new information that a company has revealed through their filings. 
-
-The SEC maintains EDGAR weblogs showing which IP addresses have accessed which documents for what company, and at what day and time this occurred.
-
-Imagine the SEC has asked you to take the data and produce a dashboard that would provide a real-time view into how users are accessing EDGAR, including how long they stay and the number of documents they access during the visit.
-
-While the SEC usually makes its EDGAR weblogs publicly available after a six month delay, imagine that for this challenge, the government entity has promised it would stream the data into your program in real-time and with no delay.
-
-Your job as a data engineer is to build a pipeline to ingest that stream of data and calculate how long a particular user spends on EDGAR during a visit and how many documents that user requests during the session. 
-
-# Challenge summary
-
-For this challenge, we're asking you to take existing publicly available EDGAR weblogs and assume that each line represents a single web request for an EDGAR document that would be streamed into your program in real time. 
-
-Using the data, identify when a user visits, calculate the duration of and number of documents requested during that visit, and then write the output to a file.
-
-Your role on the project is to work on the data pipeline to hand off the information to the front-end. As the backend data engineer, you do **not** need to display the data or work on the dashboard but you do need to provide the information.
-
-You can assume there is another process that takes what is written to the output file and sends it to the front-end. If we were building this pipeline in real life, we’d probably have another mechanism to send the output to the GUI rather than writing to a file. However, for the purposes of grading this challenge, we just want you to write the output to files.
-
-# Details of challenge
-
-For the purposes of this challenge, an IP address uniquely identifies a single user. A user is defined to have visited the EDGAR system if during the visit, the IP address requested one or more documents. 
-
-Also, for the purposes of this challenge, the amount of time that elapses between document requests should be used to determine when a visit, also referred to as a session, begins and ends. 
-
-A single user session is defined to have started when the IP address first requests a document from the EDGAR system and continues as long as the same user continues to make requests. The session is over after a certain period of time has elapsed -- we'll provide you that value -- and the user makes no requests for documents. 
-
-In other words, this period of inactivity helps to determine when the session is over and the user is assumed to have left the system. 
-
-The duration of any particular session is defined to be the time between the IP address' first request and the last one in the same session prior to the period of inactivity. If the user returns later to access another document requests, that subsequent request would be considered the start of a new session.
 
 # Implementation details
 
-Your program should expect two input files (be sure to read the section, "Repo directory structure", for details on where these files should be located):
+# Test Results
 
-* `log.csv`: EDGAR weblog data
-* `inactivity_period.txt`: Holds a single value denoting the period of inactivity that should be used to identify when a user session is over
-
-As you process the EDGAR weblogs line by line, the moment you detect a user session has ended, your program should write a line to an output file, `sessionization.txt`, listing the IP address, duration of the session and number of documents accessed.
-
-The value found in `inactivity_period.txt` should be used to determine when a session has ended and when a new session has possibly started. However, once you reach the end of the `log.csv`, that last timestamp should signal the end of all current sessions regardless of whether the period of inactivity has been met.
-
-## Input files
+# My input files
 
 ### `log.csv`
 
@@ -93,7 +43,7 @@ The first line of `log.csv` will be a header denoting the names of the fields in
 ### `inactivity_period.txt`
 This file will hold a single integer value denoting the period of inactivity (in seconds) that your program should use to identify a user session. The value will range from 1 to 86,400 (i.e., one second to 24 hours)
 
-## Output file
+# My output file
 
 Once your program identifies the start and end of a session, it should gather the following fields and write them out to a line in the output file, `sessionization.txt`. The fields on each line must be separated by a `,`:
 
@@ -107,11 +57,3 @@ Unlike the input weblog data file and for the purposes of this challenge, your p
 
 If your program is able to detect multiple user sessions ending at the same time, it should write the results to the `sessionization.txt` output file in the same order as the user's first request for that session appeared in the input `log.csv` file.
 
-# Example
-
-Suppose your input files contained only the following few lines. Note that the fields we are interested in are in **bold** below but will not be like that in the input file. There's also an extra newline between records below, but the input file won't have that.
-
-**`inactivity_period.txt`**
-> **2**
-
-**`log.csv`**
