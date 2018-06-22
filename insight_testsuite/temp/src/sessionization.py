@@ -37,7 +37,10 @@ for line in reader:
 	# print timelib
 
 	ip,date,time=line[0],line[1],line[2]
-	dt=datetime.strptime(date+time,"%Y-%m-%d%H:%M:%S")
+	if '/' in date:
+		dt=datetime.strptime(date+time,"%m/%d/%y%H:%M:%S")
+	else:
+		dt=datetime.strptime(date+time,"%Y-%m-%d%H:%M:%S")
 	keys = timelib.keys()
 	for timestamp in keys:# sessesion out
 		if (dt-timestamp).total_seconds()>interval:
